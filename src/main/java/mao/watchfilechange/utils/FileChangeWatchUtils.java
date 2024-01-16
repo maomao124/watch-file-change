@@ -31,6 +31,17 @@ public class FileChangeWatchUtils
 {
     private static final Logger log = LoggerFactory.getLogger(FileChangeWatchUtils.class);
 
+    /**
+     * 配置文件相对于项目根目录的位置
+     */
+    public static final String resourcePath = "src/main/resources";
+
+    /**
+     * 监听某一文件的修改
+     *
+     * @param filePath           文件路径
+     * @param fileChangeListener 文件更改监听器
+     */
     public static void watch(String filePath, FileChangeListener fileChangeListener)
     {
         //监听文件修改
@@ -40,7 +51,7 @@ public class FileChangeWatchUtils
             public void onModify(WatchEvent<?> event, Path currentPath)
             {
                 //重新记录文件修改时间
-                log.info("监听到此文件修改:"+ filePath);
+                log.info("监听到此文件修改:" + filePath);
                 //执行回调方法
                 fileChangeListener.callback(filePath);
             }
@@ -49,6 +60,21 @@ public class FileChangeWatchUtils
         WatchMonitor monitor = WatchMonitor.createAll(filePath, new DelayWatcher(watcher, 500));
         log.info("监听文件修改事件：" + filePath);
         monitor.start();
+    }
+
+
+    /**
+     * 监听类路径下的配置文件的修改
+     *
+     * @param classPath          类路径下的配置文件的路径
+     * @param fileChangeListener 文件更改侦听器
+     */
+    public static void watchByClassPath(String classPath, FileChangeListener fileChangeListener)
+    {
+        String dir = System.getProperty("user.dir");
+        String path = dir + File.separator + resourcePath + "/" + classPath;
+        log.debug("path：" + path);
+        watch(path, fileChangeListener);
     }
 
 }

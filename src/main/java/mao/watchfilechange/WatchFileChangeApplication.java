@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
+import java.io.File;
 
 
 @SpringBootApplication
@@ -27,10 +27,8 @@ public class WatchFileChangeApplication
             }
         });
         FileChangeWatchUtils.watch("./c.txt", filePath -> System.out.println("c已修改"));
-        String file = FileChangeWatchUtils.class.getClassLoader().getResource("test.properties").getFile();
-        file=file.substring(1);
-        System.out.println(file);
-        FileChangeWatchUtils.watch(file, filePath -> System.out.println("test.properties已修改"));
+
+        FileChangeWatchUtils.watchByClassPath("test.properties", filePath -> System.out.println("test.properties已修改"));
     }
 
 }
